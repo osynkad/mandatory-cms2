@@ -10,26 +10,20 @@ function Product(props) {
 	return (
     <div className={styles.item} onClick={() => detailsModal(props.product)}>
       <img src={props.product.image.path} alt="product_img" className={styles.item__image}/>
-      <span className={styles.item__name}>{props.product.name}</span>
-      <span className={styles.item__desc}>{props.product.description}</span>
-      <span className={styles.item__price}>{props.product.price}</span>
+      <div className={styles.item__name}>{props.product.name}</div>
+      <div className={styles.item__desc}>{props.product.description}</div>
+      <div className={styles.item__price}>{props.product.price}</div>
       {
         parseInt(props.product.stock) ? 
-        <>
-          <div>
-            In stock:
-            <span className={styles.item__stock}> {props.product.stock}</span>
-          </div>
-          <button className={styles.item__add}>Add to cart</button> 
-        </>
+        <div className={styles.item__stock}>
+          Available:
+          <span className={styles["item__stock-available"]}> {props.product.stock}</span>
+        </div>
         :
-        <>
-          <div>
-            In stock:
-            <span className={styles["item__stock-disabled"]}> {props.product.stock}</span>
-          </div>
-          <button className={styles.item__add} disabled>Add to cart</button>
-        </>
+        <div className={styles.item__stock}>
+          Available:
+          <span className={styles["item__stock-unavailable"]}> {props.product.stock}</span>
+        </div>
       } 
     </div>
 	);
