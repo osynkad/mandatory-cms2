@@ -7,23 +7,22 @@ import Product from './Product';
 function Main(props) {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios.get(`http://localhost:8080/api/collections/get/products?token=${API_KEY}`)
-      .then(res => {
-        setProducts(res.data.entries);
-      })
-  }, []) 
-
-  useEffect(() => {
+  function requestProducts() { // eslint-disable-next-line
+    let $regex = props.checkbox ? "^[1-9]\d*" : "";
     axios.post(`http://localhost:8080/api/collections/get/products?token=${API_KEY}`, {
       filter: {
-        name: { $regex: props.searchQuery }
+        name: { $regex: props.searchQuery },
+        stock: { $regex }
       }
     })
       .then(res => {
         setProducts(res.data.entries);
       })
-  }, [props.searchQuery])
+  }
+
+  useEffect(() => {
+    requestProducts(); // eslint-disable-next-line
+  }, [props.searchQuery, props.checkbox])
 
 	return (
     <main className={styles.main}>

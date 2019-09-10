@@ -16,7 +16,8 @@ function Header(props) {
 			<span className={styles["header__logo-name"]}>Logo/name placeholder</span>
 			<div className={styles.header__search}>
 				<i style={{fontSize: "21px"}} className="material-icons">search</i>
-				<input onChange={props.getSearchQuery} className={styles.header__input} placeholder="Search products"></input>
+				<input type="text" onChange={(e) => props.setSearchQuery(e.target.value)} className={styles.header__input} placeholder="Search products"></input>
+				<input type="checkbox" onClick={(e) => props.setCheckbox(e.target.checked)}></input>Show in stock
 			</div>
 			<div className={styles.header__nav}>NAVIGATION</div>
 			<div onClick={test} className={styles.header__cart}>

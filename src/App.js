@@ -4,15 +4,12 @@ import Main from './components/Main';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
-
-  function getSearchQuery(e) {
-    setSearchQuery(e.target.value);
-  }
+  const [checkbox, setCheckbox] = useState(false);
 
   return (
     <div className="App">
-      <Header getSearchQuery={getSearchQuery}/>
-      <Main searchQuery={searchQuery}/>
+      <Header setCheckbox={setCheckbox} setSearchQuery={setSearchQuery}/>
+      <Main checkbox={checkbox} searchQuery={searchQuery}/>
     </div>
   );
 }
