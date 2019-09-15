@@ -27,6 +27,7 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	background-color: #e2e1e0;
+	padding-top: 120px;
 }
 ol, ul {
 	list-style: none;

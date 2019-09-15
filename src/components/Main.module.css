@@ -1,5 +1,14 @@
 .main {
-  padding: 120px 20px 20px 20px;
+  padding: 0 20px 20px 20px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.items {
+  width: 1200px;
   display: flex;
   flex-wrap: wrap;
 }
