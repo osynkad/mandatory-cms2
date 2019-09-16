@@ -12,6 +12,7 @@
   justify-content: space-between;
   align-items: center;
   color: white;
+  border-bottom: 2px solid  rgb(141, 141, 141);
 }
 
 .header__logo-name {

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Main.module.css';
+import styles from './Items.module.css';
 import axios from 'axios';
 import { API_KEY } from '../constants';
 import Product from './Product';
+import Pagination from './Pagination';
 import { Redirect, Link } from 'react-router-dom';
 
 
 function Main(props) {
   const [products, setProducts] = useState([]);
-  const [productsPerPage, setProductPerPage] = useState(5); //let user decide through dropdown? 5/10/20/all?
-  const [redirect, setRedirect] = useState(false);
+  const [productsPerPage, setProductPerPage] = useState(8);
   const [total, setTotal] = useState(0);
 
   function requestProducts(page) { // eslint-disable-next-line
@@ -21,7 +21,6 @@ function Main(props) {
       }
     })
       .then(res => {
-        console.log(res.data);
         setTotal(res.data.total);
         setProducts(res.data.entries);
       })
@@ -29,22 +28,10 @@ function Main(props) {
 
   useEffect(() => {
     requestProducts(parseInt(props.match.params.page)); // eslint-disable-next-line
-  }, [props.searchQuery, props.checkbox, props.match.params.page])
-
-  function changePage() {
-    return <Redirect to={`/products/${parseInt(props.match.params.page) + 1}`}/>
-  }
+  }, [props.searchQuery, props.checkbox, props.match.params.page]);
 
 	return (
     <>
-      <div>
-        {
-          props.match.params.page > 1 ? <Link id="previous" to={`/products/page-${parseInt(props.match.params.page) - 1}`} style={{marginRight: "10px"}}>Previous page</Link> : null
-        }
-        {
-          props.match.params.page < Math.ceil(total/productsPerPage) ? <Link id="next" to={`/products/page-${parseInt(props.match.params.page) + 1}`}>Next page</Link> : null
-        }
-      </div>
       <div className={styles.items}>
         {
           products.map(product => {
@@ -52,6 +39,7 @@ function Main(props) {
           })
         }
       </div>
+      <Pagination page={props.match.params.page} total={total} productsPerPage={productsPerPage}/>
     </>
 	);
 }

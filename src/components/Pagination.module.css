@@ -1,0 +1,26 @@
+.pagination {
+  width: 1150px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 20px 15px 0 15px;
+  box-sizing: border-box;
+  border-top: 1px solid rgb(141, 141, 141);
+}
+
+.pagination__move {
+  text-decoration: none;
+  color: black;
+  font-size: 14px;
+}
+
+.pagination__move:hover {
+  text-decoration: underline;
+}
+
+.pagination__move-disabled {
+  text-decoration: none;
+  color: black;
+  opacity: 0.5;
+  font-size: 14px;
+}

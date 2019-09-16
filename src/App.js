@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
-import Main from './components/Main';
+import Main from './components/Items';
 import Details from './components/Details';
+import Cart from './components/Cart';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import styles from './App.module.css';
 
@@ -27,6 +28,7 @@ function App() {
           <Route exact path="/" render={() => <Redirect to="/products/page-1"/>} />
           <Route path="/products/page-:page" render={MainPage}/>
           <Route path="/details/:product" component={Details}/> 
+          <Route path="/cart" component={Cart}/>
         </main>
       </div>
     </Router>

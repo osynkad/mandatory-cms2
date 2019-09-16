@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Header.module.css';
+import { Link } from 'react-router-dom';
+import { cart$ } from '../Store';
 
 function Header(props) {
-	const [cartCount, setCartCount] = useState(0);
+	const [cartItems, setCartItems] = useState(0);
 
-	function test() {
-		let temp = cartCount;
-		temp++;
-		setCartCount(temp);
-		console.log("Bingo!");
-	}
+	useEffect(() => {
+		cart$.subscribe(newCart => {
+			if(newCart !== null) {
+				setCartItems(Object.keys(JSON.parse(newCart)).length);
+			}
+    });
+	})
 
 	return (
 		<header className={styles.header}>
@@ -20,11 +23,11 @@ function Header(props) {
 				<input type="checkbox" onClick={(e) => props.setCheckbox(e.target.checked)}></input>Show in stock
 			</div>
 			<div className={styles.header__nav}>NAVIGATION</div>
-			<div onClick={test} className={styles.header__cart}>
-				<i style={{fontSize: "36px", userSelect: "none"}} className="material-icons">shopping_cart</i>
+			<div className={styles.header__cart}>
+			<Link to="/cart" style={{textDecoration: "none"}, {color: "white"}}><i style={{fontSize: "36px", userSelect: "none"}} className="material-icons">shopping_cart</i></Link>
 				{
-					cartCount > 0 ?
-					<div className={styles["header__cart-count"]}>{cartCount}</div> : null
+					cartItems ?
+					<div className={styles["header__cart-count"]}>{cartItems}</div> : null
 				}
 			</div>
 		</header>
