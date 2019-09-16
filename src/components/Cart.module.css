@@ -12,6 +12,18 @@
   border-collapse: collapse;
 }
 
+.cart__link {
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.cart__link:hover {
+  text-decoration: underline;
+}
+
 .cart__thead-row {
 
 }

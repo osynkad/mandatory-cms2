@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Cart.module.css';
 import { Link } from 'react-router-dom';
-import { cart$ } from '../Store';
+import { cart$, updateCart } from '../Store';
 import axios from 'axios';
 import { API_KEY } from '../constants';
 
@@ -13,31 +13,36 @@ function Cart(props) {
 
   useEffect(() => {
     let t = total, q = quantity;
-    Object.keys(cart).map((item) => {
-      console.log(cart[item])
-      t += cart[item].total;
-      q += cart[item].quantity;
-    })
-    setTotal(t.toFixed(2));
-    setQuantity(q);
-  }, [])
-
-
-  function cheat() {
-    console.log(cart);
-    axios.get(`http://localhost:8080/api/collections/get/orders?token=${API_KEY}`)
-      .then(res => {
-        console.log(res.data);
+    if(cart) {
+      Object.keys(cart).map((item) => {
+        t += cart[item].total;
+        q += cart[item].quantity;
       })
+      setTotal(t.toFixed(2));
+      setQuantity(q);
+    }
+  }, [])
+  
+
+  function formatCart() {
+    let order = [];
+    for(let x in cart) {
+      order.push({value: {product: x, _id: cart[x]._id, quantity: cart[x].quantity, price: cart[x].price, total: cart[x].total}})
+    }
+    return order;
   }
 
   function placeOrder() { // eslint-disable-next-line
     axios.post(`http://localhost:8080/api/collections/save/orders?token=${API_KEY}`, {
       headers: { 'Content-Type': 'application/json' },
-      data: { name: "emil", adress: "kallegatan", order: [{value: {product: "kek", quantity: 2, price: 3}}, {value: {product: "kak", quantity: 20, price: 30}}] }
+      data: { name: "emil", adress: "kallegatan", order: formatCart() }
     })
       .then(res => {
         console.log(res);
+        updateCart();
+      })
+      .catch(err => {
+        console.error(err);
       })
   }
 
@@ -58,7 +63,7 @@ function Cart(props) {
               Object.keys(cart).map((item) => {
                 return (
                   <tr key={cart[item]._id} className={styles["cart__tbody-row"]}>
-                    <td>{item}</td>
+                    <td><Link to={`/details/${item}`} className={styles.cart__link}>{item}</Link></td>
                     <td style={{textTransform: "lowercase"}}>x {cart[item].quantity}</td>
                     <td>${cart[item].price}</td>
                   </tr>
@@ -69,7 +74,7 @@ function Cart(props) {
           </tbody>
           <tfoot>
             <tr className={styles["cart__tfoot-row"]}>
-              <th onClick={cheat}>Total</th>
+              <th>Total</th>
               <th style={{textTransform: "lowercase"}}>x {quantity}</th>
               <th onClick={placeOrder}>${total}</th>
             </tr>

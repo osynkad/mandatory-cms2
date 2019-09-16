@@ -9,7 +9,7 @@ function Header(props) {
 	useEffect(() => {
 		cart$.subscribe(newCart => {
 			if(newCart !== null) {
-				setCartItems(Object.keys(JSON.parse(newCart)).length);
+				setCartItems(Object.keys(JSON.parse(newCart)));
 			}
     });
 	})
@@ -24,7 +24,7 @@ function Header(props) {
 			</div>
 			<div className={styles.header__nav}>NAVIGATION</div>
 			<div className={styles.header__cart}>
-			<Link to="/cart" style={{textDecoration: "none"}, {color: "white"}}><i style={{fontSize: "36px", userSelect: "none"}} className="material-icons">shopping_cart</i></Link>
+			<Link to="/cart" style={{textDecoration: "none", color: "white"}}><i style={{fontSize: "36px", userSelect: "none"}} className="material-icons">shopping_cart</i></Link>
 				{
 					cartItems ?
 					<div className={styles["header__cart-count"]}>{cartItems}</div> : null
