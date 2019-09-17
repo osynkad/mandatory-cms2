@@ -16,7 +16,10 @@
 }
 
 .header__logo-name {
-
+  font-weight: bold;
+  font-size: 28px;
+  text-decoration: none;
+  color: white;
 }
 
 .header__search {
@@ -38,10 +41,6 @@
 
 .header__input:focus {
   border-color: white;
-}
-
-.header__nav {
-
 }
 
 .header__cart {

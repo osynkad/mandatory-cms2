@@ -52,7 +52,7 @@ function Details(props) {
 
   useEffect(() => {
     axios.get(`http://localhost:8080/api/collections/get/products?token=${API_KEY}&filter[name]=${props.match.params.product}`)
-      .then(res => { //&filter[product]=${props.match.params.product}
+      .then(res => {
         setProduct(res.data.entries[0]);
         axios.get(`http://localhost:8080/api/collections/get/reviews?token=${API_KEY}&filter[product_name]=${props.match.params.product}`)
           .then(res => {
@@ -91,15 +91,16 @@ function Details(props) {
                 <input type="number" name="quantity" min="1" max="50"></input>
                 <button type="submit" className={styles.details__btn}>Add to cart</button>
               </form>
-              <form onSubmit={(e) => postReview(e)}>
-                <input type="text" required></input>
-                <textarea required></textarea>
+              <form className={styles.form} onSubmit={(e) => postReview(e)}>
+                <input className={styles.form__input} type="text" required></input>
+                <textarea className={[styles.form__input, styles.form__textarea].join(' ')} required></textarea>
                 <Rating
                   ref={rating}
+                  style={{marginTop: "5px"}}
                   emptySymbol={<img alt="empty star" src="https://i.imgur.com/WGjj5N4.png" className="icon" />}
                   fullSymbol={<img alt="full star" src="https://i.imgur.com/THRrctC.png" className="icon" />}
                 />
-                <button type="submit">Add review</button>
+                <button style={{marginTop: "5px", paddingTop: "2px"}} className={styles.form__submit} type="submit">Add review</button>
               </form>
             </div>
           </>

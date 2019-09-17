@@ -32,10 +32,11 @@ function Cart(props) {
     return order;
   }
 
-  function placeOrder() { // eslint-disable-next-line
+  function placeOrder(e) { // eslint-disable-next-line
+    e.preventDefault();
     axios.post(`http://localhost:8080/api/collections/save/orders?token=${API_KEY}`, {
       headers: { 'Content-Type': 'application/json' },
-      data: { name: "emil", adress: "kallegatan", order: formatCart() }
+      data: { name: e.target[0].value, address: e.target[1].value, order: formatCart() }
     })
       .then(res => {
         console.log(res);
@@ -50,36 +51,43 @@ function Cart(props) {
     <div className={styles.cart}>
       {
         cart$.value ? 
-        <table className={styles.cart__table}>
-          <thead className={styles.cart__thead}>
-            <tr className={styles["cart__thead-row"]}>
-              <th className={styles["cart__thead-product"]}>Product</th>
-              <th className={styles["cart__thead-quantity"]}>Quantity</th>
-              <th className={styles["cart__thead-price"]}>Price</th>
-            </tr>
-          </thead>
-          <tbody className={styles.cart__tbody}>
-            {
-              Object.keys(cart).map((item) => {
-                return (
-                  <tr key={cart[item]._id} className={styles["cart__tbody-row"]}>
-                    <td><Link to={`/details/${item}`} className={styles.cart__link}>{item}</Link></td>
-                    <td style={{textTransform: "lowercase"}}>x {cart[item].quantity}</td>
-                    <td>${cart[item].price}</td>
-                  </tr>
-                )
-              })
-            }
-            <tr id="separator" style={{height: "20px"}}></tr>
-          </tbody>
-          <tfoot>
-            <tr className={styles["cart__tfoot-row"]}>
-              <th>Total</th>
-              <th style={{textTransform: "lowercase"}}>x {quantity}</th>
-              <th onClick={placeOrder}>${total}</th>
-            </tr>
-          </tfoot>
-        </table>
+        <>
+          <table className={styles.cart__table}>
+            <thead className={styles.cart__thead}>
+              <tr className={styles["cart__thead-row"]}>
+                <th className={styles["cart__thead-product"]}>Product</th>
+                <th className={styles["cart__thead-quantity"]}>Quantity</th>
+                <th className={styles["cart__thead-price"]}>Price</th>
+              </tr>
+            </thead>
+            <tbody className={styles.cart__tbody}>
+              {
+                Object.keys(cart).map((item) => {
+                  return (
+                    <tr key={cart[item]._id} className={styles["cart__tbody-row"]}>
+                      <td><Link to={`/details/${item}`} className={styles.cart__link}>{item}</Link></td>
+                      <td style={{textTransform: "lowercase"}}>x {cart[item].quantity}</td>
+                      <td>${cart[item].price}</td>
+                    </tr>
+                  )
+                })
+              }
+              <tr id="separator" style={{height: "20px"}}></tr>
+            </tbody>
+            <tfoot>
+              <tr className={styles["cart__tfoot-row"]}>
+                <th>Total</th>
+                <th style={{textTransform: "lowercase"}}>x {quantity}</th>
+                <th onClick={placeOrder}>${total}</th>
+              </tr>
+            </tfoot>
+          </table>
+          <form className={styles.form} onSubmit={(e) => placeOrder(e)}>
+            <input className={styles.form__input} type="text" placeholder="name" required></input>
+            <input className={styles.form__input} type="text" placeholder="address" required></input>
+            <button className={styles.form__submit} type="submit">Place order</button>
+          </form>
+        </>
         : 
         <div>Your cart is empty.</div>
       }
