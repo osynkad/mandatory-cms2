@@ -13,21 +13,21 @@ function Cart(props) {
 
   useEffect(() => {
     let t = total, q = quantity;
-    if(cart) {
+    if(cart) { // eslint-disable-next-line
       Object.keys(cart).map((item) => {
         t += cart[item].total;
         q += cart[item].quantity;
       })
       setTotal(t.toFixed(2));
       setQuantity(q);
-    }
+    }  // eslint-disable-next-line
   }, [])
   
 
   function formatCart() {
     let order = [];
-    for(let x in cart) {
-      order.push({value: {product: x, _id: cart[x]._id, quantity: cart[x].quantity, price: cart[x].price, total: cart[x].total}})
+    for(let item in cart) {
+      order.push({value: {product: item, _id: cart[item]._id, quantity: cart[item].quantity, price: cart[item].price, total: cart[item].total}})
     }
     return order;
   }

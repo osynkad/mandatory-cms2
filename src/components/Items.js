@@ -4,7 +4,6 @@ import axios from 'axios';
 import { API_KEY } from '../constants';
 import Product from './Product';
 import Pagination from './Pagination';
-import { Redirect, Link } from 'react-router-dom';
 
 
 function Main(props) {

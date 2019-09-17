@@ -8,11 +8,13 @@ function Header(props) {
 
 	useEffect(() => {
 		cart$.subscribe(newCart => {
-			if(newCart !== null) {
-				setCartItems(Object.keys(JSON.parse(newCart)));
+			if(newCart) {
+				setCartItems(Object.keys(JSON.parse(newCart)).length);
+			} else {
+				setCartItems(0);
 			}
     });
-	})
+	}, [])
 
 	return (
 		<header className={styles.header}>
