@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './Pagination.module.css';
 import { Link } from 'react-router-dom';
+import styles from './Pagination.module.css';
 
 function Pagination(props) {
 

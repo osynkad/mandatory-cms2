@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Cart.module.css';
+import { API_KEY, API_URL_POST } from '../constants';
 import { Link } from 'react-router-dom';
 import { cart$, updateCart } from '../Store';
 import axios from 'axios';
-import { API_KEY } from '../constants';
+import styles from './Cart.module.css';
 
 function Cart(props) {
   const [total, setTotal] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(0); 
+  const [order, setOrder] = useState(null);
   
-  const cart = JSON.parse(cart$.value);
+  const cart = cart$.value ? JSON.parse(cart$.value) : null
 
   useEffect(() => {
     let t = total, q = quantity;
     if(cart) { // eslint-disable-next-line
-      Object.keys(cart).map((item) => {
-        t += cart[item].total;
-        q += cart[item].quantity;
+      Object.keys(cart).map((product) => {
+        t += cart[product].total;
+        q += cart[product].quantity;
       })
       setTotal(t.toFixed(2));
       setQuantity(q);
@@ -25,21 +26,22 @@ function Cart(props) {
   
 
   function formatCart() {
-    let order = [];
-    for(let item in cart) {
-      order.push({value: {product: item, _id: cart[item]._id, quantity: cart[item].quantity, price: cart[item].price, total: cart[item].total}})
+    let order = [];  // eslint-disable-next-line
+    for(let product in cart) {
+      order.push({value: {product, _id: cart[product]._id, quantity: cart[product].quantity, price: cart[product].price, total: cart[product].total}})
     }
     return order;
   }
 
   function placeOrder(e) { // eslint-disable-next-line
     e.preventDefault();
-    axios.post(`http://localhost:8080/api/collections/save/orders?token=${API_KEY}`, {
+    axios.post(`${API_URL_POST}/orders?token=${API_KEY}`, {
       headers: { 'Content-Type': 'application/json' },
-      data: { name: e.target[0].value, address: e.target[1].value, order: formatCart() }
+      data: { name: e.target[0].value, address: e.target[1].value, total_price: total, order: formatCart() }
     })
       .then(res => {
         console.log(res);
+        setOrder(res.data);
         updateCart();
       })
       .catch(err => {
@@ -50,7 +52,13 @@ function Cart(props) {
 	return (
     <div className={styles.cart}>
       {
-        cart$.value ? 
+        order ? 
+        <>
+          <div>Thank you for your purchase!</div>
+          <div>Order # - {order._id}</div>
+        </>
+        :
+        cart ? 
         <>
           <table className={styles.cart__table}>
             <thead className={styles.cart__thead}>
@@ -62,12 +70,12 @@ function Cart(props) {
             </thead>
             <tbody className={styles.cart__tbody}>
               {
-                Object.keys(cart).map((item) => {
+                Object.keys(cart).map((product) => {
                   return (
-                    <tr key={cart[item]._id} className={styles["cart__tbody-row"]}>
-                      <td><Link to={`/details/${item}`} className={styles.cart__link}>{item}</Link></td>
-                      <td style={{textTransform: "lowercase"}}>x {cart[item].quantity}</td>
-                      <td>${cart[item].price}</td>
+                    <tr key={cart[product]._id} className={styles["cart__tbody-row"]}>
+                      <td><Link to={`/details/${product}`} className={styles.cart__link}>{product}</Link></td>
+                      <td style={{textTransform: "lowercase"}}>x {cart[product].quantity}</td>
+                      <td>${cart[product].price}</td>
                     </tr>
                   )
                 })
@@ -78,7 +86,7 @@ function Cart(props) {
               <tr className={styles["cart__tfoot-row"]}>
                 <th>Total</th>
                 <th style={{textTransform: "lowercase"}}>x {quantity}</th>
-                <th onClick={placeOrder}>${total}</th>
+                <th>${total}</th>
               </tr>
             </tfoot>
           </table>

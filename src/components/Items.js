@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Items.module.css';
-import axios from 'axios';
-import { API_KEY } from '../constants';
+import { API_KEY, API_URL_GET } from '../constants';
 import Product from './Product';
 import Pagination from './Pagination';
+import axios from 'axios';
+import styles from './Items.module.css';
 
 
 function Main(props) {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);  // eslint-disable-next-line
   const [productsPerPage, setProductPerPage] = useState(8);
   const [total, setTotal] = useState(0);
 
   function requestProducts(page) { // eslint-disable-next-line
     let $regex = props.checkbox ? "^[1-9]\d*" : "";
-    axios.post(`http://localhost:8080/api/collections/get/products?token=${API_KEY}&limit=${productsPerPage}&skip=${productsPerPage * (page - 1)}`, {
+    axios.post(`${API_URL_GET}/products?token=${API_KEY}&limit=${productsPerPage}&skip=${productsPerPage * (page - 1)}`, {
       filter: {
         name: { $regex: props.searchQuery },
         stock: { $regex }
       }
     })
       .then(res => {
+        console.log(res);
         setTotal(res.data.total);
         setProducts(res.data.entries);
       })

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Header.module.css';
 import { Link } from 'react-router-dom';
 import { cart$ } from '../Store';
+import styles from './Header.module.css';
 
 function Header(props) {
 	const [cartItems, setCartItems] = useState(0);
